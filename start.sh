@@ -9,7 +9,16 @@ done
 DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 
 cd $DIR
-./burp_updater.py
+terms=($TERMINAL x-terminal-emulator urxvt rxvt termit terminator gnome-terminal konsole xterm)  
+for t in ${terms[*]}
+do
+    if [ $(command -v $t) ]
+    then
+        detected_term=$t
+        break
+    fi
+done
+$detected_term -e python3 burp_updater.py
 
 cd $(ls | grep burpsuite)
 

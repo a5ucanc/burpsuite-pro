@@ -1,8 +1,10 @@
-#! /usr/bin/python3
+#! /usr/bin/python
+
 from glob import glob
 import os
 from os import path
 import platform
+from telnetlib import NOP
 import requests
 import wget
 from bs4 import BeautifulSoup
@@ -49,6 +51,7 @@ while not conf:
 def filter_func(element: str):
     if element.string.find('Community') != -1:
         return False
+
     elif element.string.find('Jar') != -1:
         return True
     sy, mac = conf['machine'].split('$')
@@ -58,11 +61,11 @@ def filter_func(element: str):
 
 # Get the main release page https://portswigger.net/burp/releases#professional
 # Search for the latest version avalible, usually not stable
-print('[*] Looking for the latest stable version')
-releases = requests.get(BASE_URL + '/burp/releases#professional')
+print("[*] Looking for the latest version")
+releases = requests.get(BASE_URL + '/burp/releases')
 soup = BeautifulSoup(releases.text, 'html.parser')
 versions = soup.find_all('a', class_='noscript-post')
-
+versions = list(filter(lambda x: x.text.find('Enterprise') == -1, versions))
 for v in versions:
     download = requests.get(BASE_URL + v['href'])
     # Stable versions are marked with class label-light-red-small
@@ -83,11 +86,16 @@ relevant = list(filter(filter_func, builds))
 link = relevant[0]['href']
 
 # Delete previous version
-[curr_ver] = glob(conf['folder'] + 'burpsuite_pro*.jar')
-curr_ver = path.splitext(path.basename(curr_ver))[0]
-curr_ver = curr_ver[curr_ver.find('v')+1:]
+try:
+    [curr_ver_file] = glob(conf['folder'] + 'burpsuite_pro*.jar')
+    curr_ver = path.splitext(path.basename(curr_ver_file))[0]
+    curr_ver = curr_ver[curr_ver.find('v')+1:]
+
+except ValueError:
+    curr_ver = '0'
+
 if curr_ver < version[0]:
-    os.remove(curr_ver[0])
+    os.remove(curr_ver_file) if curr_ver != '0' else NOP
     # Download
     print('[*] Starting the download of ' + relevant[0].text)
     burp = wget.download(BASE_URL + link, out=conf['folder'])
