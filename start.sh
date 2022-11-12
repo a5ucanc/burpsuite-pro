@@ -18,11 +18,12 @@ do
         break
     fi
 done
+# Currently buggy
 $detected_term -e python3 burp_updater.py
 
 cd $(ls | grep burpsuite)
 
-loader=$(ls | grep BurpSuiteLoader)
+loader=$(ls | grep oader)
 burp=$(ls | grep burpsuite)
 
 java -javaagent:$loader -noverify -jar $burp &> /dev/null &
