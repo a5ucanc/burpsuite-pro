@@ -35,7 +35,7 @@ def load_config():
 
 def start_config():
     with open(CONFIG_FILE, 'w') as conf:
-        burp_folder = input('[?] Burp folder location: ')
+        burp_folder = input('[?] Burp jar files location: ')
         conf.write('download_folder:' + burp_folder + '\n')
         machine = f'{platform.system()}${platform.machine()}'
         conf.write('machine:' + machine + '\n')
@@ -65,7 +65,7 @@ print("[*] Looking for the latest version")
 releases = requests.get(BASE_URL + '/burp/releases')
 soup = BeautifulSoup(releases.text, 'html.parser')
 versions = soup.find_all('a', class_='noscript-post')
-versions = list(filter(lambda x: x.text.find('Enterprise') == -1, versions))
+versions = list(filter(lambda x: x.text.find('Professional') != -1, versions))
 for v in versions:
     download = requests.get(BASE_URL + v['href'])
     # Stable versions are marked with class label-light-red-small
