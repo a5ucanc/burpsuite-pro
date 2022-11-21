@@ -1,10 +1,11 @@
 # Burpsuite Pro
 Burpsuite Pro jar and updater script
 
-To start Burpsuite type in the console:
+On the first run Burpsuite type in the console:
 1. `cmod +x ./start.sh`
 2. `./start.sh`
 3. `cd burpsuite_pro; java -jar burploader.jar`
+4. Follow the video [link](https://www.youtube.com/watch?v=e9u6myyve4g&ab_channel=AseelPSathar)
 
 **Updates will run automaticly on each start**
 
