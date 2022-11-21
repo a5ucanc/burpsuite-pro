@@ -21,9 +21,11 @@ errors = False
 for lib in additional:
     if lib not in sys.modules:
         errors = True
-        print(f'[!] Error: could not find {lib}, please install using: pip3 install {lib}')
+        print(
+            f'[!] Error: could not find {lib}, please install using: pip3 install {lib}')
 if errors:
     exit()
+
 
 def load_config():
     # Load configs from updater_configs.txt
@@ -47,14 +49,14 @@ def load_config():
 
 def start_config():
     wd = os.getcwd()
-    default_burp =  os.listdir(wd)
+    default_burp = os.listdir(wd)
     for file in default_burp:
-        if path.isdir(path.join(wd,file)):
+        if path.isdir(path.join(wd, file)):
             if 'burpsuite' in file:
                 default_burp = path.join(wd, file)
                 break
     with open(CONFIG_FILE, 'w') as conf:
-        print(f'[*] Burp folder location ({default_burp}) ' )
+        print(f'[*] Burp folder location ({default_burp}) ')
         conf.write('download_folder:' + default_burp + '\n')
         machine = f'{platform.system()}${platform.machine()}'
         conf.write('machine:' + machine + '\n')
