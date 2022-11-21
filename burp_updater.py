@@ -2,16 +2,28 @@
 
 from glob import glob
 import os
+import sys
 from os import path
 import platform
 from telnetlib import NOP
 import requests
-import wget
-from bs4 import BeautifulSoup
+try:
+    import wget
+    from bs4 import BeautifulSoup
+except ModuleNotFoundError as e:
+    pass
 
 BASE_URL = 'https://portswigger.net'
 CONFIG_FILE = 'updater_configs.txt'
 
+additional = ['wget', 'beautifulsoup4']
+errors = False
+for lib in additional:
+    if lib not in sys.modules:
+        errors = True
+        print(f'[!] Error: could not find {lib}, please install using: pip3 install {lib}')
+if errors:
+    exit()
 
 def load_config():
     # Load configs from updater_configs.txt
@@ -34,12 +46,19 @@ def load_config():
 
 
 def start_config():
+    wd = os.getcwd()
+    default_burp =  os.listdir(wd)
+    for file in default_burp:
+        if path.isdir(path.join(wd,file)):
+            if 'burpsuite' in file:
+                default_burp = path.join(wd, file)
+                break
     with open(CONFIG_FILE, 'w') as conf:
-        burp_folder = input('[?] Burp folder location: ')
-        conf.write('download_folder:' + burp_folder + '\n')
+        print(f'[*] Burp folder location ({default_burp}) ' )
+        conf.write('download_folder:' + default_burp + '\n')
         machine = f'{platform.system()}${platform.machine()}'
         conf.write('machine:' + machine + '\n')
-    return {'folder': burp_folder, 'machine': machine}
+    return {'folder': default_burp, 'machine': machine}
 
 
 conf = load_config()
@@ -65,7 +84,7 @@ print("[*] Looking for the latest version")
 releases = requests.get(BASE_URL + '/burp/releases')
 soup = BeautifulSoup(releases.text, 'html.parser')
 versions = soup.find_all('a', class_='noscript-post')
-versions = list(filter(lambda x: x.text.find('Enterprise') == -1, versions))
+versions = list(filter(lambda x: x.text.find('Professional') != -1, versions))
 for v in versions:
     download = requests.get(BASE_URL + v['href'])
     # Stable versions are marked with class label-light-red-small

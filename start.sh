@@ -18,6 +18,7 @@ do
         break
     fi
 done
+
 # Currently buggy
 $detected_term -e python3 burp_updater.py
 
