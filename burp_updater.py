@@ -7,24 +7,26 @@ from os import path
 import platform
 from telnetlib import NOP
 import requests
+
 try:
     import wget
     from bs4 import BeautifulSoup
 except ModuleNotFoundError as e:
-    pass
+    print(f'[!] Please install {e.name} with pip3')
+    exit()
+
 
 BASE_URL = 'https://portswigger.net'
 CONFIG_FILE = 'updater_configs.txt'
 
-additional = ['wget', 'beautifulsoup4']
-errors = False
-for lib in additional:
-    if lib not in sys.modules:
-        errors = True
-        print(
-            f'[!] Error: could not find {lib}, please install using: pip3 install {lib}')
-if errors:
-    exit()
+# additional = ['wget', 'beautifulsoup4']
+# for lib in additional:
+#     if lib not in sys.modules:
+#         errors = True
+#         print(
+#             f'[!] Error: could not find {lib}, please install using: pip3 install {lib}')
+# if errors:
+#     exit()
 
 
 def load_config():
@@ -106,9 +108,9 @@ relevant = list(filter(filter_func, builds))
 # selected = int(input('[#] Select build: '))
 link = relevant[0]['href']
 
-# Delete previous version
+# Check and delete if installed version less then latest
 try:
-    [curr_ver_file] = glob(conf['folder'] + 'burpsuite_pro*.jar')
+    [curr_ver_file] = glob(conf['folder'] + '/burpsuite_pro*.jar')
     curr_ver = path.splitext(path.basename(curr_ver_file))[0]
     curr_ver = curr_ver[curr_ver.find('v')+1:]
 

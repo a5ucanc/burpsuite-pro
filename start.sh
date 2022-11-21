@@ -19,7 +19,7 @@ do
     fi
 done
 
-# Currently buggy
+# Currently buggy opening a console
 python3 burp_updater.py
 
 cd $(ls | grep burpsuite)
