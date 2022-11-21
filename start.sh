@@ -20,7 +20,7 @@ do
 done
 
 # Currently buggy
-$detected_term -e python3 burp_updater.py
+python3 burp_updater.py
 
 cd $(ls | grep burpsuite)
 
