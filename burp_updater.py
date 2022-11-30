@@ -117,7 +117,7 @@ try:
 except ValueError:
     curr_ver = '0'
 
-if curr_ver < version[0]:
+if int(curr_ver.replace('.','')) < int(version[0].replace('.','')):
     os.remove(curr_ver_file) if curr_ver != '0' else NOP
     # Download
     print('[*] Starting the download of ' + relevant[0].text)
