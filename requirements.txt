@@ -1,0 +1,3 @@
+wget
+beautifulsoup4
+requests

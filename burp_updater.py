@@ -2,9 +2,7 @@
 
 from glob import glob
 import os
-import sys
 from os import path
-import platform
 from telnetlib import NOP
 import requests
 
@@ -17,58 +15,6 @@ except ModuleNotFoundError as e:
 
 
 BASE_URL = 'https://portswigger.net'
-# CONFIG_FILE = 'updater_configs.txt'
-
-# additional = ['wget', 'beautifulsoup4']
-# for lib in additional:
-#     if lib not in sys.modules:
-#         errors = True
-#         print(
-#             f'[!] Error: could not find {lib}, please install using: pip3 install {lib}')
-# if errors:
-#     exit()
-
-
-# def load_config():
-#     # Load configs from updater_configs.txt
-#     try:
-#         with open(CONFIG_FILE, 'r') as conf:
-#             lines = conf.readlines()
-#             for line in lines:
-#                 field, value = line.split(':')
-#                 match field:
-#                     case 'download_folder':
-#                         download = value.replace('\n', '')
-#                     case 'machine':
-#                         machine = value.replace('\n', '')
-#                     case _:
-#                         if not download and machine:
-#                             return ''
-#         return {'folder': download, 'machine': machine}
-#     except Exception:
-#         return ''
-
-
-# def start_config():
-#     wd = os.getcwd()
-#     default_burp = os.listdir(wd)
-#     for file in default_burp:
-#         if path.isdir(path.join(wd, file)):
-#             if 'burpsuite' in file:
-#                 default_burp = path.join(wd, file)
-#                 break
-#     with open(CONFIG_FILE, 'w') as conf:
-#         print(f'[*] Burp folder location ({default_burp}) ')
-#         conf.write('download_folder:' + default_burp + '\n')
-#         machine = f'{platform.system()}${platform.machine()}'
-#         conf.write('machine:' + machine + '\n')
-#     return {'folder': default_burp, 'machine': machine}
-
-
-# conf = load_config()
-# while not conf:
-#     conf = start_config()
-
 
 # Get the main release page https://portswigger.net/burp/releases#professional
 # Search for the latest version avalible, usually not stable
@@ -108,7 +54,7 @@ except ValueError:
 if int(curr_ver.replace('.','')) < int(version[0].replace('.','')):
     os.remove(curr_ver_file) if curr_ver != '0' else NOP
     # Download
-    print('[*] Starting the download of ' + relevant[0].text)
+    print('[*] Starting the download of ' + relevant[0].text + ' version ' + version[0])
     burp = wget.download(BASE_URL + link, out=os.getcwd() + '/burpsuite_pro/')
     print('\n[*] Download completed, Burp Suite updated successfuly to ' + version[0])
 else:
