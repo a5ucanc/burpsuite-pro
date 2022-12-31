@@ -9,8 +9,9 @@ done
 DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 
 cd $DIR
-
-$TERM -e python3 burp_updater.py
+IFS='-'
+read -a strarr <<< "$TERM"
+strarr[0] -e python3 burp_updater.py
 
 cd $(ls | grep burpsuite)
 
