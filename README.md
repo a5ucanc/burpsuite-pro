@@ -14,7 +14,9 @@ Burpsuite Pro jar and updater script
 
 ## Usage
 Run `start.sh` file to start burpsuite.
+
 **Updates will run automaticly on each start**
+
 You can create a symlink to the __start.sh__ script so you could run burp from any location by writing
 `sudo ln -s [Path to Burp]/start.sh /usr/bin/burp`
 
